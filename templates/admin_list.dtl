@@ -1,0 +1,9 @@
+{% extends "common.dtl" %}
+{% block title %} - {% trans "calcjs Framework Admin" %}{% endblock %}
+{% block content %}
+<h3>{% trans "calcjs Admin" %}</h3>
+<div><a href="/admin/conf">{% trans "API Configuration" %}</div>
+<br>
+<div><a href="/admin/calc/">{% trans "Forms List" %}</div>
+<br>
+{% endblock %}

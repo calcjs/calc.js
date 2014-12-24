@@ -1,0 +1,23 @@
+{% extends "common.dtl" %}
+{% block title %} API Configuration{% endblock %}
+{% block scripts %}
+{% endblock %}
+{% block content %}
+<h3>{% trans "API Configuration" %}</h3>
+<form method="post" action="/admin/conf/">
+    <div>
+        <label for="input_attribute_type">{%  trans "Input field attribute used for getting form data: " %}</label>
+        <input type="radio" id="input_attribute_type" name="input_attribute_type" value="id" {% if data.input_attribute_type == "id" %}checked{% endif %}>ID</input>
+        <input type="radio" id="input_attribute_type" name="input_attribute_type" value="name" {% if data.input_attribute_type == "name" %}checked{% endif %}>Name</input>
+    </div>
+    <br>
+    <div>
+        <label>{%  trans "Last Update Date: " %}</label>
+        {% date value=data.last_updated_date %}
+    </div>
+    <br>
+  <input type="submit" value={% trans "Save" %} />
+</form>
+<br>
+<div><a href="/admin/">{%  trans "Back" %}</a></div>
+{% endblock %}

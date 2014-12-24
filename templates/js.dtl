@@ -1,0 +1,338 @@
+jQuery(function($){
+
+    {% if current_form_info.status == "error" %}
+         // field data API error message
+        alert("Data retrieval error!\n\n" +
+              "Form ID: {{ form_id }}\n" +
+              "API: Field data API\n" +
+              "Error message: {{ current_form_info.message }}");
+    {% endif %}
+
+    // define objects for dependent forms data
+    var dependentForms = [];
+    var formUrl = new Object();
+    var partialFormUrl = new Object();
+
+    {% for form in dependent_forms %}
+        if(dependentForms.indexOf("{{ form_id }}") == -1) {
+            dependentForms.push("{{ form.form_id }}");
+             var {{ form.form_id }} = new Object();
+        }
+    {% endfor %}
+
+    {% for form in dependent_forms_data %}
+        formUrl["{{ form.form_id }}"] = "{{ form.form_url }}";
+
+        {% if form.field_data.status == "error" %}
+             // Data Retrieval API error message
+            alert("Data retrieval error!\n\n" +
+                  "Form ID: {{ form.form_id }}\n" +
+                  "API: Data Retrieval API\n" +
+                  "URL:  {{ form.data_retrieval_url }}\n" +
+                  "Error message: {{ form.field_data.message }}");
+        {% endif %}
+
+        {% for field_data in form.field_data.data %}
+            {{ form.form_id }}.{{ field_data.name }} = {% js_calc_value value=field_data.value type=field_data.type repeating=field_data.repeating %};
+        {% endfor %}
+    {% endfor %}
+
+    //corrected fields
+    var correctedFields = [];
+
+    function do_calculations() {
+        //current form calculations
+        {
+            // define variables for the calculation fields
+            {% for info in current_form_info.data %}
+                {% define_current_form_fields field_data=info %}  
+            {% endfor %}
+            //do calculations
+            {% if calcs %}
+            {% for calc in calcs %}
+                {% if calc.active %}
+                    {% if form_id == calc.form_id %}
+                        {% if calc.always_execute %}
+                            {
+                                {{ calc.formula | safe }}
+                            }
+                        {% else %}
+                            {% if calc.repeating %}
+                                {
+                                    {{ calc.formula | safe }}
+                                }
+                                restore_corrected_repeating_values("{{ calc.field }}", {{ calc.field }});
+                            {% else %}
+                                if(!$(get_selector_str("{{ calc.field }}")).hasClass("color-corrected")) {
+                                    {{ calc.formula | safe }}
+                                }
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        update_current_form_object();
+                        {{ calc.form_id }}_calcs();
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            // set calculated values
+            {% for calc in calcs %}
+                {% if form_id == calc.form_id and calc.active %} 
+                    {% if calc.repeating %}
+                        set_repeating_field_array("{{ calc.field }}",{{ calc.field }}, {{ calc.label }});     
+                    {% else %}
+                        {% if calc.label %}
+                            $(get_selector_str("{{ calc.field }}_label")).text({{ calc.field }});
+                        {% endif %}
+                        $(get_selector_str("{{ calc.field }}")).val({{ calc.field }});
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            {% endif %}
+
+            update_current_form_object();
+
+            //update current form object
+            function update_current_form_object() {
+                var object = new Object();
+
+                {% for form in dependent_forms_data.forms_data %}
+                    {% if form_id == form.formId %}
+                        {% for field_data in form.data %}
+                            {% update_form_object_values field_data=field_data %} 
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                {{ form_id }} = object;
+            }
+        }
+        {% if dependent_forms_calcs %}
+        // dependent form calculations
+        {% for form_data in dependent_forms_calcs %}
+            function {{ form_data.form_id }}_calcs() {
+                {% for form in dependent_forms_data %}
+                    {% if form_data.form_id == form.form_id %}
+                        var object = {{ form.form_id }};
+                        var dep_corrected_fields = [{% for cf in form.field_data.corrected_fields %}"{{ cf }}"{% endfor %}];
+                        // define dependent form elements
+                        {% for field_data in form.field_data.data %}
+                            {% define_dependent_form_fields field_data=field_data %}  
+                        {% endfor %}
+                        // do calculations
+                        {% dependent_form_calculations form_data=form_data %}
+                        // set calculated values back
+                        {% for field_data in form.data %}
+                            {% update_form_object_values field_data=field_data %}  
+                        {% endfor %}
+                        {{ form_data.form_id }} = object;
+                    {% endif %}
+                {% endfor %}
+            }
+        {% endfor %}
+        {% endif %}
+    }
+
+    var inputAttributeType = "{{ conf.input_attribute_type }}";
+
+    function init() {
+        if ($("input,select,textarea").length > 0) {
+            $(".commafied").inputmask();
+            // keyup event handler
+            $("input,select,textarea").keyup(function(e) {
+                if(e.keyCode == 46) {
+                    var fieldName = $(this).attr(inputAttributeType);
+                    var fieldElem = $(get_selector_str(fieldName));
+                    if(fieldElem.hasClass("color-corrected")){
+                        fieldElem.removeClass("color-corrected");
+                        fieldElem.addClass("color-calculated");
+                        fieldElem.val("");
+                        var index = correctedFields.indexOf(fieldName);
+                        if(index > -1) {
+                            correctedFields.splice(index, 1);
+                        }
+                        do_calculations();
+                    }
+                }
+            });
+            // change event handler
+            $("input,select,textarea").change(function() {
+                var fieldName = $(this).attr(inputAttributeType);
+                var fieldElem = $(get_selector_str(fieldName));
+                if(fieldElem.hasClass("color-calculated")){
+                    fieldElem.removeClass("color-calculated");
+                    fieldElem.addClass("color-corrected");
+                    var index = correctedFields.indexOf(fieldName);
+                    if(index == -1) {
+                        correctedFields.push(fieldName);
+                    }
+                }
+                do_calculations();
+            });
+            //corrected fields
+            init_corrected_fields();
+            //Initial calculations
+            do_calculations();
+        } else {
+            setTimeout(function() { init(); }, 100);
+        }
+    }
+    setTimeout(function() { init(); }, 100);
+
+    $("form").submit(function(e) { 
+         e.preventDefault();
+         e.returnValue = false;
+         set_corrected_fields();
+         var requests = [];
+         for (i = 0; i < dependentForms.length; ++i) {
+              var id = dependentForms[i];
+              var object = eval(id);
+              var url = formUrl[id];
+              if(url) {
+                  var jsonData = '{"data":[' + JSON.stringify(object) + ']}';
+                  add_ajax_json_request(requests, url, jsonData);
+              }
+         }
+         $.when.apply($, requests).done(function () {
+             $("form").off("submit");
+             $("form").submit();
+         })
+         .fail(function() {
+             // TODO handle failed event
+         });
+    });
+
+    function add_ajax_json_request(requests, url, jsonData) {
+        var request = $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: 'json',
+            data: jsonData,
+            disableCaching: false
+        });
+        requests.push(request);
+    }
+
+    function get_repeating_field_array(fieldName) {
+        var array = [];
+        var elemNr = 1;
+        while ($(get_selector_str(fieldName + "_" + elemNr)).length ) {
+            var value = $(get_selector_str(fieldName + "_" + elemNr)).val();
+            array.push(value);
+            elemNr++;
+        }
+        return array;
+    }
+    
+    function set_repeating_field_array(fieldName, array, setLabel) {
+        for (var i = 1; i <= array.length; i++) {
+            var fieldObj = $(get_selector_str(fieldName + "_" + i));
+            if(fieldObj.length) {
+                if(setLabel) {
+                   fieldObj.text(array[i-1]); 
+                }
+                fieldObj.val(array[i-1]);
+            }
+        }
+    }
+
+    function init_corrected_fields() {
+        
+        correctedFields = $(get_selector_str("corrected_fields")).val().split(",");
+        correctedFields = correctedFields.filter(function(e){return e && e != "{}"}); //remove empty values 
+        
+        for (var i = 0; i < correctedFields.length; i++) {
+            var fieldElem = $(get_selector_str(correctedFields[i]));
+        
+            if(fieldElem.hasClass("color-calculated")){
+                fieldElem.removeClass("color-calculated");
+                fieldElem.addClass("color-corrected");
+            }
+        }
+        {% comment %}
+        if(correctedFields["{{ form_id }}"]) {
+            var formCorrectedFields = correctedFields["{{ form_id }}"];
+            for (var i = 0; i < formCorrectedFields.length; i++) {
+                var fieldElem = $(get_selector_str(formCorrectedFields[i]));
+                if(fieldElem.hasClass("color-calculated")){
+                    fieldElem.removeClass("color-calculated");
+                    fieldElem.addClass("color-corrected");
+                }
+            }
+        } else {
+            correctedFields["{{ form_id }}"] = [];
+        }
+        {% endcomment %}
+    }
+
+    function restore_corrected_repeating_values(fieldName, array) {
+        for (var i = 1; i <= array.length; i++) {
+            var fieldElem = $(get_selector_str(fieldName + "_" + i)); 
+            if(fieldElem.hasClass("color-corrected")){
+                array[i-1] = fieldElem.val();
+            }
+        }
+    }
+
+    function restore_dep_form_corrected_field_value(formObj, fieldName, previousFieldVal) {
+        if(formObj.has_associate_object) {
+            for(var key in formObj) {
+                var subObject = formObj[key];
+                if(jQuery.isPlainObject(subObject)) {
+                    var correctedFields = subObject.corrected_fields.split(",");
+                    var index = correctedFields.indexOf(fieldName);
+                    if(index > -1) {
+                       subObject[fieldName] = previousFieldVal[key];
+                    } 
+                }
+            }
+        } else {
+            var correctedFields = formObj.corrected_fields.split(",");
+            var index = correctedFields.indexOf(fieldName);
+            if(index > -1) {
+               formObj[fieldName] = previousFieldVal;
+            }         
+        } 
+    }
+    
+    function get_cloned_field_values(formObj, fieldName){
+        if(formObj.has_associate_object) {
+            var result = new Object();
+            for(var key in formObj) {
+                var subObject = formObj[key];
+                if(jQuery.isPlainObject(subObject)) {
+                    result[key] = clone_value(subObject[fieldName]);
+                }
+            }
+            return result;
+        } else {
+            return clone_value(formObj[fieldName]);
+        } 
+    } 
+    
+    function clone_value(value) {
+        var clonedValue;
+        if(jQuery.isArray(value)) {
+            clonedValue = jQuery.extend(true, [], value);
+        } else if(jQuery.isPlainObject(value)){
+            clonedValue = jQuery.extend(true, {}, value);
+        } else {
+            clonedValue = value;
+        }
+        return clonedValue;
+    }
+    
+    function set_corrected_fields() {
+        correctedFields.sort();
+        var correctedFieldsStr = correctedFields.join(",");
+        $(get_selector_str("corrected_fields")).val(correctedFieldsStr);
+    }
+
+    function get_selector_str(name) {
+        {% if conf.input_attribute_type == "name" %}
+            return "[name='" + name + "']";
+        {% else %}
+            return "#" + name;
+        {% endif %}
+    }
+
+});

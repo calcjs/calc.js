@@ -1,0 +1,18 @@
+{application, calcjs, [
+	{description, ""},
+	{vsn, "0.1.0"},
+	{modules, []},
+	{registered, []},
+	{applications, [
+		kernel,
+		stdlib,
+        cowboy,
+        erlydtl,
+        lager,
+        mnesia,
+        hackney,
+        jiffy
+	]},
+	{mod, {calcjs_app, []}},
+	{env, []}
+]}.

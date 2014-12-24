@@ -1,0 +1,145 @@
+ {% if field_data.repeating %}
+     {% if field_data.type == 4 %} //zipcode
+         object.{{ field_data.name }} = [];
+
+         for (var i = 0; i < {{ field_data.name }}_zip1.length; i++) {
+             var fieldObj = new Object();
+
+             fieldObj.zip1 = {{ field_data.name }}_zip1[i];
+             fieldObj.zip2 = {{ field_data.name }}_zip2[i];
+
+             object.{{ field_data.name }}.push(fieldObj);
+         }
+     {% elif field_data.type == 5 %} //jdate
+         object.{{ field_data.name }} = [];
+
+         for (var i = 0; i < {{ field_data.name }}_era.length; i++) {
+             var fieldObj = new Object();
+
+             fieldObj.era = {{ field_data.name }}_era[i];
+             fieldObj.year = {{ field_data.name }}_year[i];
+             fieldObj.month = {{ field_data.name }}_month[i];
+             fieldObj.day = {{ field_data.name }}_day[i];
+
+             object.{{ field_data.name }}.push(fieldObj);
+         }
+     {% elif field_data.type == 6 %} //yymm jdate
+         object.{{ field_data.name }} = [];
+
+         for (var i = 0; i < {{ field_data.name }}_era.length; i++) {
+             var fieldObj = new Object();
+
+             fieldObj.era = {{ field_data.name }}_era[i];
+             fieldObj.yy = {{ field_data.name}}_yy[i];
+             fieldObj.mm = {{ field_data.name }}_mm[i];
+
+             object.{{ field_data.name }}.push(fieldObj);
+         }
+     {% elif field_data.type == 7 %} //value label
+         object.{{ field_data.name }} = [];
+
+         for (var i = 0; i < {{ field_data.name }}_value.length; i++) {
+             var fieldObj = new Object();
+
+             fieldObj.value = {{ field_data.name }}_value[i];
+             fieldObj.label = {{ field_data.name}}_label[i];
+
+             object.{{ field_data.name }}.push(fieldObj);
+         }
+     {% elif field_data.type == 8 %} //yy jdate
+         object.{{ field_data.name }} = [];
+
+         for (var i = 0; i < {{ field_data.name }}_era.length; i++) {
+             var fieldObj = new Object();
+
+             fieldObj.era = {{ field_data.name }}_era[i];
+             fieldObj.yy = {{ field_data.name}}_yy[i];
+
+             object.{{ field_data.name }}.push(fieldObj);
+         }
+     {% elif field_data.type == 9 %} //id ref
+         object.{{ field_data.name }} = {{ field_data.name }};     
+     {% elif field_data.type == 10 %} //tel num
+         object.{{ field_data.name }} = [];
+
+         for (var i = 0; i < tel1.length; i++) {
+             var fieldObj = new Object();
+
+             fieldObj.tel1 = {{ field_data.name }}_tel1[i];
+             fieldObj.tel2 = {{ field_data.name }}_tel2[i];
+             fieldObj.tel3 = {{ field_data.name }}_tel3[i];
+
+             object.{{ field_data.name }}.push(fieldObj);
+         }
+     {% elif field_data.type == 11 %} //mmdd jdate
+         object.{{ field_data.name }} = [];
+
+         for (var i = 0; i < {{ field_data.name }}_mm.length; i++) {
+             var fieldObj = new Object();
+
+             fieldObj.mm = {{ field_data.name }}_mm[i];
+             fieldObj.dd = {{ field_data.name}}_dd[i];
+
+             object.{{ field_data.name }}.push(fieldObj);
+         }
+     {% elif field_data.type == 12 %} //yymmdd jdate
+         object.{{ field_data.name }} = [];
+
+         for (var i = 0; i < {{ field_data.name }}_era.length; i++) {
+             var fieldObj = new Object();
+
+             fieldObj.era = {{ field_data.name }}_era[i];
+             fieldObj.yy = {{ field_data.name }}_yy[i];
+             fieldObj.mm = {{ field_data.name }}_mm[i];
+             fieldObj.dd = {{ field_data.name }}_dd[i];
+
+             object.{{ field_data.name }}.push(fieldObj);
+         }
+     {% else %}
+         object.{{ field_data.name }} = {{ field_data.name }};     
+     {% endif %}
+ {% else %}
+     {% if field_data.type == 4 %} //zipcode
+         object.{{ field_data.name }} = new Object();
+         object.{{ field_data.name }}.zip1 = {{ field_data.name }}_zip1;
+         object.{{ field_data.name }}.zip2 = {{ field_data.name }}_zip2;
+     {% elif field_data.type == 5 %} //jdate
+         object.{{ field_data.name }} = new Object();
+         object.{{ field_data.name }}.era = {{ field_data.name }}_era;
+         object.{{ field_data.name }}.year = {{ field_data.name }}_year;
+         object.{{ field_data.name }}.month = {{ field_data.name }}_month;
+         object.{{ field_data.name }}.day = {{ field_data.name }}_day;
+     {% elif field_data.type == 6 %} //yymm jdate
+         object.{{ field_data.name }} = new Object();
+         object.{{ field_data.name }}.era = {{ field_data.name }}_era;
+         object.{{ field_data.name }}.year = {{ field_data.name }}_year;
+         object.{{ field_data.name }}.month = {{ field_data.name }}_month;
+     {% elif field_data.type == 7 %} //value label
+         object.{{ field_data.name }} = new Object(); 
+         object.{{ field_data.name }}.value = {{ field_data.name }}_value;
+         object.{{ field_data.name }}.label = {{ field_data.name }}_label;
+     {% elif field_data.type == 8 %} //yy jdate
+         object.{{ field_data.name }} = new Object(); 
+         object.{{ field_data.name }}.era = {{ field_data.name }}_era;
+         object.{{ field_data.name }}.yy = {{ field_data.name }}_yy;
+     {% elif field_data.type == 9 %} //id ref
+         object.{{ field_data.name }} = {{ field_data.name }};    
+     {% elif field_data.type == 10 %} //tel num
+         object.{{ field_data.name }} = new Object(); 
+         object.{{ field_data.name }}.tel1 = {{ field_data.name }}_tel1;
+         object.{{ field_data.name }}.tel2 = {{ field_data.name }}_tel2;
+         object.{{ field_data.name }}.tel3 = {{ field_data.name }}_tel3;
+     {% elif field_data.type == 11 %} //mmdd jdate
+         object.{{ field_data.name }} = new Object(); 
+         object.{{ field_data.name }}.mm = {{ field_data.name }}_mm;
+         object.{{ field_data.name }}.dd = {{ field_data.name}}_dd;
+     {% elif field_data.type == 12 %} //yymmdd jdate
+         object.{{ field_data.name }} = new Object(); 
+         object.{{ field_data.name }}.era = {{ field_data.name }}_era;
+         object.{{ field_data.name }}.yy = {{ field_data.name }}_yy;
+         object.{{ field_data.name }}.mm = {{ field_data.name }}_mm;
+         object.{{ field_data.name }}.dd = {{ field_data.name }}_dd;
+     {% else %}
+         object.{{ field_data.name }} = {{ field_data.name }};
+     {% endif %}
+ {% endif %}

@@ -1,0 +1,104 @@
+{% extends "common.dtl" %}
+{% block title %} - {{ data.id }}{% endblock %}
+{% block scripts %}
+<script type="application/javascript" src="/assets/js/admin_calc.js"></script>
+{% endblock %}
+{% block content %}
+<form method="post" action="/admin/calc/">
+    <input type="hidden" name="numDependentForms" id="numDependentForms" value="{% if data %}{{ data.num_dependent_forms }}{% endif %}" />
+    <div>
+        <label for="id">{%  trans "ID:" %}</label>
+        <input type="text" id="id" name="id" value="{{ data.id }}" size="100" />
+    </div>
+    <div>
+        <label for="description">{%  trans "Description:" %}</label>
+        <input type="text" id="description" name="description" value="{{ data.description }}" size="100" />
+    </div>
+    <div>
+        <label for="active">{% trans "Active:" %}</label>
+        <input type="checkbox" id="active" name="active" {% if data.active %}checked{% endif %} />
+    </div>
+    <div>
+        <label>{% trans "Creation Date:" %}</label>
+        {% date value=data.creation_date %}
+        {% hidden_timestamp name="creation_date" value=data.creation_date %}
+    </div>
+    <div>
+        <label>{% trans "Last Updated Date:" %}</label>
+        {% date value=data.last_updated_date %}
+    </div>
+    <div>
+        <label for="data_retrieval_api">{% trans "Data Retrieval API" %}</label>
+        <input type="text" name="data_retrieval_api" value="{{ data.data_retrieval_api }}" size="100" /> {dependent_object_id}
+    </div>
+    <div>
+        <label for="post_api">{% trans "post_api" %}</label>
+        <input type="text" name="post_api", value="{{ data.post_api }}" size="100" /> {dependent_object_id}
+    </div>
+    <div>
+        <label for="field_info_api">{% trans "field_info_api" %}</label>
+        <input type="text" name="field_info_api", value="{{ data.field_info_api }}" size="100" />
+    </div>
+    <h2>{% trans "Dependent Forms" %}</h2>
+    <input type="hidden" id="form_type_value_list" value="" />
+    <div>
+        <table id="depFormTable" border="1px">
+            <tr>
+                <th>{% trans "Form Name" %}</th>
+                <th>{% trans "Data Retrieval API" %}</th>
+                <th>{% trans "POST API" %}</th>
+                <th>{% trans "Field Info API" %}</th>
+                <th>{% trans "Op" %}</th>
+            </tr>
+            {% for dep_form in data.dependent_forms %}
+            <tr>
+                <td><input type="text" size="34" name="dependent_form_id_{{ forloop.counter }}" value="{{ dep_form.form_id }}" /></td>
+                <td>
+                    <input type="text" name="dep_form_data_retrieval_api_{{ forloop.counter }}" value="{{ dep_form.data_retrieval_api }}" />
+                </td>
+                <td>
+                    <input type="text" name="dep_form_post_api_{{ forloop.counter }}" value="{{ dep_form.post_api }}" />
+                </td>
+                <td>
+                    <input type="text" name="dep_form_field_info_api_{{ forloop.counter }}" value="{{ dep_form.field_info_api }}" />
+                </td>
+                <td><input type="button" onClick="deleteDependentFormRow({{ forloop.counter }})" value="{% trans "Delete" %}" /></td>
+            </tr>
+            {% endfor %}
+            <tr><td colspan="3"><input type="button" onClick="addDependentForm()" value="{% trans "Add" %}" /></td></tr>
+        </table>
+    </div>
+    <h2>{%  trans "Calculations" %}</h2>
+    <table id="calcTable" border="1px">
+        <tr>
+            <th>{% trans "Form Id" %}</th>
+            <th>{% trans "Calculation Order" %}</th>
+            <th>{% trans "Field Name" %}</th>
+            <th>{% trans "Repeating" %}</th>
+            <th>{% trans "Formula" %}</th>
+            <th>{% trans "Always Execute" %}</th>
+            <th>{% trans "Set a label" %}</th>
+            <th>{% trans "Active" %}</th>
+            <th>{% trans "Op" %}</th>
+        </tr>
+        {% for calc in data.calc_data %}
+        <tr id ="row_{{ forloop.counter }}">
+            <td><input type="text" size="34" name="form_id_{{ forloop.counter }}" id="form_id_{{ forloop.counter }}" value="{{ calc.form_id }}" /></td>
+            <td><input type="text" size="3" name="order_{{ forloop.counter }}" id="order_{{ forloop.counter }}" value="{{ calc.order }}" /></td>
+            <td><input type="text" size="14" name="field_{{ forloop.counter }}" id="field_{{ forloop.counter }}" value="{{ calc.field }}" /></td>
+            <td><input type="checkbox" name="repeating_{{ forloop.counter }}" {% if calc.repeating %}checked{% endif %}></td>
+            <td><textarea type="text" name="formula_{{ forloop.counter }}" id="formula_{{ forloop.counter }}" rows="4" cols="100" >{{ calc.formula }}</textarea></td>
+            <td><input type="checkbox" name="always_execute_{{ forloop.counter }}" {% if calc.always_execute %}checked{% endif %}></td>
+            <td><input type="checkbox" name="label_{{ forloop.counter }}" {% if calc.label %}checked{% endif %}></td>
+            <td><input type="checkbox" name="active_{{ forloop.counter }}" {% if calc.active %}checked{% endif %}></td>
+            
+            <td><input type="button" onClick="deleteCalculationRow({{ forloop.counter }})" value="{% trans "Delete" %}" /></td>
+        </tr>
+        {% endfor %}
+        <tr><td colspan="9"><input type="button" onClick="addCalculationRow()" value={% trans "Add" %} /></td></tr>
+  </table>
+  <input id="numCalculations" type="hidden" name="numCalculations" value="{{ data.num_calculations }}" />
+  <input type="submit" value={% trans "Save" %} />
+</form>
+<div><a href="/admin/calc/">{%  trans "Back" %}</a></div>
+{% endblock %}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>calc.js sample form</title>
+		<link rel="stylesheet" type="text/css" href="http://localhost:8003/assets/css/calcjs.css" media="screen" />
+		<!-- include the dependent library files -->
+		<script type="application/javascript" src="http://localhost:8003/assets/js/jquery.min.js"></script>
+		<script type="application/javascript" src="http://localhost:8003/assets/js/jquery.inputmask.bundle.js" ></script>
+		<script type="application/javascript" src="http://localhost:8003/assets/js/BigDecimal-all-last.min.js" ></script>
+		<!-- add the provided calculation utility functions -->
+		<script type="application/javascript" src="http://localhost:8003/assets/js/calcjs.utils.js" ></script>
+		<!-- add the generated js -->
+		<script type="application/javascript" src="http://localhost:8003/js/SampleForm1?dependent_object_id=1" ></script>
+	</head>
+	<body>
+		<h1>Sample calc.js Form</h1>
+		<form method="post" action="/sample/saveDataSample.php">
+			<input type="hidden" id="corrected_fields" name="corrected_fields" value="" />
+			<div>
+				<label for="field1">field1: </label>
+				<input type="text" id="field1" name="field1" class="commafied" value="123" size="15" data-inputmask="'alias': 'integer', 'integerDigits': 15, 'allowMinus':true, 'groupSeparator': ',', 'autoGroup': true, 'groupSize': 3" />
+			</div>
+			<div>
+				<label for="field2">field2: </label>
+				<input type="text" id="field2" name="field2" class="commafied" value="456" size="15" data-inputmask="'alias': 'integer', 'integerDigits': 15, 'allowMinus':true, 'groupSeparator': ',', 'autoGroup': true, 'groupSize': 3" />
+			</div>
+			<div>
+				<label for="field3">field3: </label>
+				<input type="text" id="field3" name="field3" class="commafied color-calculated" size="15" data-inputmask="'alias': 'integer', 'integerDigits': 15, 'allowMinus':true, 'groupSeparator': ',', 'autoGroup': true, 'groupSize': 3" />
+			</div>
+			<div>
+				<input type="submit" value="save" />
+			</div>
+		</form>
+	</body>
+</html>

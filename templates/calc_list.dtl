@@ -1,0 +1,34 @@
+{% extends "common.dtl" %}
+{% block title %} - {% trans "Forms List" %}{% endblock %}
+{% block scripts %}
+<script type="application/javascript" src="/assets/js/admin_calc_list.js"></script>
+{% endblock %}
+{% block content %}
+<h3>{% trans "Forms" %}</h3>
+<table border="1px">
+    <tr>
+        <th>{% trans "ID" %}</th>
+        <th>{% trans "Form Name" %}</th>
+        <th>{% trans "Status" %}</th>
+        <th>{% trans "Last Updated Date" %}</th>
+        <th>{% trans "Creation Date" %}</th>
+        <th>{% trans "Op" %}</th>
+    </tr>
+    {% if data %}
+        {% for forms_calc in data %}
+    <tr id="{{ forms_calc.id }}_row">
+        <td><a href="/admin/calc/{{ forms_calc.id }}">{{ forms_calc.id }}</a></td>
+        <td>{{ forms_calc.description }}</td>
+        <td>{% if forms_calc.active %}{% trans "Active" %}{% else %}{% trans "Disabled" %}{% endif %}</td>
+        <td>{% date value=forms_calc.last_updated_date %}</td>
+        <td>{% date value=forms_calc.creation_date %}</td>
+        <td><input type="button" value="{% trans "Delete" %}" onclick="del('{{ forms_calc.id }}');" /></td>
+    </tr>
+        {% endfor %}
+    {% endif %}
+</table>
+<br>
+<div><a href="/admin/calc/new">{% trans "Create New" %}</div>
+<br>
+<div><a href="/admin/">{%  trans "Back" %}</a></div>
+{% endblock %}

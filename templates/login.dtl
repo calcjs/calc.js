@@ -1,0 +1,20 @@
+{% extends "common.dtl" %}
+{% block title %}calc.js - login{% endblock %}
+{% block content %}
+{% if error %}
+<font color="red">{{ error }}</font>
+{% endif %}
+<form method="post">
+<table border="1px">
+<tr>
+  <th>Id</th>
+  <td><input type="text" name="id" /></td>
+</tr>
+<tr>
+  <th>Password</th>
+  <td><input type="password" name="password"/></td>
+</tr>
+</table>
+<input type="submit" value="Log in" />
+</form >
+{% endblock %}

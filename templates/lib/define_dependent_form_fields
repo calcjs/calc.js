@@ -1,0 +1,73 @@
+ {% if field_data.repeating %}
+     {% if field_data.type == 4 %} //zipcode
+         var {{ field_data.name }}_zip1 = object.{{ field_data.name }}.zip1;
+         var {{ field_data.name }}_zip2 = object.{{ field_data.name }}.zip2;
+     {% elif field_data.type == 5 %} //jdate
+         var {{ field_data.name }}_era = object.{{ field_data.name }}.era;
+         var {{ field_data.name }}_year = object.{{ field_data.name }}.year;
+         var {{ field_data.name }}_month = object.{{ field_data.name }}.month;
+         var {{ field_data.name }}_day = object.{{ field_data.name }}.day;
+     {% elif field_data.type == 6 %} //yymm jdate
+         var {{ field_data.name }}_era = object.{{ field_data.name }}.era;
+         var {{ field_data.name }}_yy = object.{{ field_data.name}}.yy;
+         var {{ field_data.name }}_mm = object.{{ field_data.name }}.mm;
+     {% elif field_data.type == 7 %} //value label
+         var {{ field_data.name }}_value = object.{{ field_data.name }}.value;
+         var {{ field_data.name }}_label = object.{{ field_data.name}}.label;
+     {% elif field_data.type == 8 %} //yy jdate
+         var {{ field_data.name }}_era = object.{{ field_data.name }}.era;
+         var {{ field_data.name }}_yy = object.{{ field_data.name}}.yy;
+     {% elif field_data.type == 9 %} //id ref
+         var {{ field_data.name }} = object.{ field_data.name }};     
+     {% elif field_data.type == 10 %} //tel num
+         var {{ field_data.name }}_tel1 = object.{{ field_data.name }}.tel1;
+         var {{ field_data.name }}_tel2 = object.{{ field_data.name}}.tel2;
+         var {{ field_data.name }}_tel3 = object.{{ field_data.name }}.tel3;
+     {% elif field_data.type == 11 %} //mmdd jdate
+         var {{ field_data.name }}_mm = object.{{ field_data.name }}.mm;
+         var {{ field_data.name }}_dd = object.{{ field_data.name}}.dd;
+     {% elif field_data.type == 12 %} //yymmdd jdate
+         var {{ field_data.name }}_era = object.{{ field_data.name }}.era;
+         var {{ field_data.name }}_yy = object.{{ field_data.name }}.yy;
+         var {{ field_data.name }}_mm = object.{{ field_data.name }}.mm;
+         var {{ field_data.name }}_dd = object.{{ field_data.name }}.dd;
+     {% else %}
+         var {{ field_data.name }} = object.{{ field_data.name }};     
+     {% endif %}
+ {% else %}
+     {% if field_data.type == 4 %} //zipcode
+         var {{ field_data.name }}_zip1 = object.{{ field_data.name }}.zip1;
+         var {{ field_data.name }}_zip2 = object.{{ field_data.name }}.zip2;
+     {% elif field_data.type == 5 %} //jdate
+         var {{ field_data.name }}_era = object.{{ field_data.name }}.era;
+         var {{ field_data.name }}_year = object.{{ field_data.name }}.year;
+         var {{ field_data.name }}_month = object.{{ field_data.name }}.month;
+         var {{ field_data.name }}_day = object.{{ field_data.name }}.day;
+     {% elif field_data.type == 6 %} //yymm jdate
+         var {{ field_data.name }}_era = object.{{ field_data.name }}.era;
+         var {{ field_data.name }}_yy = object.{{ field_data.name }}.yy;
+         var {{ field_data.name }}_mm = object.{{ field_data.name }}.mm;
+     {% elif field_data.type == 7 %} //value label 
+         var {{ field_data.name }}_value = object.{{ field_data.name }}.value;
+         var {{ field_data.name }}_label = object.{{ field_data.name}}.label;
+     {% elif field_data.type == 8 %} //yy jdate
+         var {{ field_data.name }}_era = object.{{ field_data.name }}.era;
+         var {{ field_data.name }}_yy = object.{{ field_data.name}}.yy;
+     {% elif field_data.type == 9 %} //id ref
+         var {{ field_data.name }} =  object.{{ field_data.name }};    
+     {% elif field_data.type == 10 %} //tel num
+         var {{ field_data.name }}_tel1 = object.{{ field_data.name }}.tel1;
+         var {{ field_data.name }}_tel2 = object.{{ field_data.name}}.tel2;
+         var {{ field_data.name }}_tel3 = object.{{ field_data.name }}.tel3;
+     {% elif field_data.type == 11 %} //mmdd jdate
+         var {{ field_data.name }}_mm = object.{{ field_data.name }}.mm;
+         var {{ field_data.name }}_dd = object.{{ field_data.name}}.dd;
+     {% elif field_data.type == 12 %} //yymmdd jdate
+         var {{ field_data.name }}_era = object.{{ field_data.name }}.era;
+         var {{ field_data.name }}_yy = object.{{ field_data.name }}.yy;
+         var {{ field_data.name }}_mm = object.{{ field_data.name }}.mm;
+         var {{ field_data.name }}_dd = object.{{ field_data.name }}.dd;
+     {% else %}
+         var {{ field_data.name }} = object.{{ field_data.name }};
+     {% endif %}
+ {% endif %}

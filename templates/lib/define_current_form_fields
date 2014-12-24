@@ -1,0 +1,73 @@
+ {% if field_data.repeating %}
+     {% if field_data.type == 4 %} //zipcode
+         var {{ field_data.name }}_zip1 = get_repeating_field_array("{{ field_data.name }}_zip1");
+         var {{ field_data.name }}_zip2 = get_repeating_field_array("{{ field_data.name }}_zip2");
+     {% elif field_data.type == 5 %} //jdate
+         var {{ field_data.name }}_era = get_repeating_field_array("{{ field_data.name }}_era");
+         var {{ field_data.name }}_year = get_repeating_field_array("{{ field_data.name }}_year");
+         var {{ field_data.name }}_month = get_repeating_field_array("{{ field_data.name }}_month");
+         var {{ field_data.name }}_day = get_repeating_field_array("{{ field_data.name }}_day");
+     {% elif field_data.type == 6 %} //yymm jdate
+         var {{ field_data.name }}_era = get_repeating_field_array("{{ field_data.name }}_era");
+         var {{ field_data.name }}_yy = get_repeating_field_array("{{ field_data.name}}_yy");
+         var {{ field_data.name }}_mm = get_repeating_field_array("{{ field_data.name }}_mm");
+     {% elif field_data.type == 7 %} //value label
+         var {{ field_data.name }}_value = get_repeating_field_array("{{ field_data.name }}_value");
+         var {{ field_data.name }}_label = get_repeating_field_array("{{ field_data.name}}_label");
+     {% elif field_data.type == 8 %} //yy jdate
+         var {{ field_data.name }}_era = get_repeating_field_array("{{ field_data.name }}_era");
+         var {{ field_data.name }}_yy = get_repeating_field_array("{{ field_data.name}}_yy");
+     {% elif field_data.type == 9 %} //id ref
+         var {{ field_data.name }} = get_repeating_field_array("{{ field_data.name }}");     
+     {% elif field_data.type == 10 %} //tel num
+         var {{ field_data.name }}_tel1 = get_repeating_field_array("{{ field_data.name }}_tel1");
+         var {{ field_data.name }}_tel2 = get_repeating_field_array("{{ field_data.name}}_tel2");
+         var {{ field_data.name }}_tel3 = get_repeating_field_array("{{ field_data.name }}_tel3");
+     {% elif field_data.type == 11 %} //mmdd jdate
+         var {{ field_data.name }}_mm = get_repeating_field_array("{{ field_data.name }}_mm");
+         var {{ field_data.name }}_dd = get_repeating_field_array("{{ field_data.name}}_dd");
+     {% elif field_data.type == 12 %} //yymmdd jdate
+         var {{ field_data.name }}_era = get_repeating_field_array("{{ field_data.name }}_era");
+         var {{ field_data.name }}_yy = get_repeating_field_array("{{ field_data.name }}_yy");
+         var {{ field_data.name }}_mm = get_repeating_field_array("{{ field_data.name }}_mm");
+         var {{ field_data.name }}_dd = get_repeating_field_array("{{ field_data.name }}_dd");
+     {% else %}
+         var {{ field_data.name }} = get_repeating_field_array("{{ field_data.name }}");     
+     {% endif %}
+ {% else %}
+     {% if field_data.type == 4 %} //zipcode
+         var {{ field_data.name }}_zip1 = $(get_selector_str("{{ field_data.name }}_zip1")).val();
+         var {{ field_data.name }}_zip2 = $(get_selector_str("{{ field_data.name }}_zip2")).val();
+     {% elif field_data.type == 5 %} //jdate
+         var {{ field_data.name }}_era = $(get_selector_str("{{ field_data.name }}_era")).val();
+         var {{ field_data.name }}_year = $(get_selector_str("{{ field_data.name }}_year")).val();
+         var {{ field_data.name }}_month = $(get_selector_str("{{ field_data.name }}_month")).val();
+         var {{ field_data.name }}_day = $(get_selector_str("{{ field_data.name }}_day")).val();
+     {% elif field_data.type == 6 %} //yymm jdate
+         var {{ field_data.name }}_era = $(get_selector_str("{{ field_data.name }}_era")).val();
+         var {{ field_data.name }}_yy = $(get_selector_str("{{ field_data.name }}_yy")).val();
+         var {{ field_data.name }}_mm = $(get_selector_str("{{ field_data.name }}_mm")).val();
+     {% elif field_data.type == 7 %} //value label 
+         var {{ field_data.name }}_value = $(get_selector_str("{{ field_data.name }}_value")).val();
+         var {{ field_data.name }}_label = $(get_selector_str("{{ field_data.name}}_label")).val();
+     {% elif field_data.type == 8 %} //yy jdate
+         var {{ field_data.name }}_era = $(get_selector_str("{{ field_data.name }}_era")).val();
+         var {{ field_data.name }}_yy = $(get_selector_str("{{ field_data.name}}_yy")).val();
+     {% elif field_data.type == 9 %} //id ref
+         var {{ field_data.name }} =  $(get_selector_str("{{ field_data.name }}")).val();    
+     {% elif field_data.type == 10 %} //tel num
+         var {{ field_data.name }}_tel1 = $(get_selector_str("{{ field_data.name }}_tel1")).val();
+         var {{ field_data.name }}_tel2 = $(get_selector_str("{{ field_data.name}}_tel2")).val();
+         var {{ field_data.name }}_tel3 = $(get_selector_str("{{ field_data.name }}_tel3")).val();
+     {% elif field_data.type == 11 %} //mmdd jdate
+         var {{ field_data.name }}_mm = $(get_selector_str("{{ field_data.name }}_mm")).val();
+         var {{ field_data.name }}_dd = $(get_selector_str("{{ field_data.name}}_dd")).val();
+     {% elif field_data.type == 12 %} //yymmdd jdate
+         var {{ field_data.name }}_era = $(get_selector_str("{{ field_data.name }}_era")).val();
+         var {{ field_data.name }}_yy = $(get_selector_str("{{ field_data.name }}_yy")).val();
+         var {{ field_data.name }}_mm = $(get_selector_str("{{ field_data.name }}_mm")).val();
+         var {{ field_data.name }}_dd = $(get_selector_str("{{ field_data.name }}_dd")).val();
+     {% else %}
+         var {{ field_data.name }} = $(get_selector_str("{{ field_data.name }}")).val();
+     {% endif %}
+ {% endif %}

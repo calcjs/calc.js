@@ -1,0 +1,28 @@
+{% for calc in form_data.calcs %}
+    {% if form_data.form_id == calc.form_id and calc.active %}
+        {% if calc.always_execute %}
+            {
+                {{ calc.formula | safe }}
+            }
+        {% else %}
+            {% if calc.repeating %}
+                var previousFieldVal = jQuery.extend(true, [], {{ calc.field }});
+                {
+                    {{ calc.formula | safe }}
+                }
+                object.{{ calc.field }} = restore_dep_form_corrected_repeating_values(object."{{ calc.field }}", previousFieldVal);
+                //function restore_dep_form_corrected_field_value(formObj, fieldName, previousFieldVal) {
+                //restore repeating corrected values
+                for (i = 0; i < {{ calc.field }}.length; i++) {
+                    if(correctedFields["{{ form_data.form_id }}"] && correctedFields["{{ form_data.form_id }}"].contains(fieldName + "_" + (i+1))) {
+                        {{ calc.field }}[i] = previousFieldVal[i];
+                    }
+                 }
+            {% else %}
+                if(!(correctedFields["{{ form_data.form_id }}"] && correctedFields["{{ form_data.form_id }}"].contains("{{ calc.field }}"))) {
+                    {{ calc.formula | safe }}
+                }
+            {% endif %}
+        {% endif %}            
+    {% endif %}
+{% endfor %}
