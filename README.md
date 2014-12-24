@@ -26,7 +26,7 @@ We first started out calc.js as a seperate module for one of our client's projec
 # Installation
 1. Modify rel/sys.config to match your environment (calcjs:http_port, calcjs:admin_port, mnesia:dir).
 1. Run the following commands
-<pre><code>cd calcjs
+<pre><code>cd calc.js
 make clean && make
 ./_rel/calcjs_release/bin/calcjs_release start
 ./_rel/calcjs_release/bin/calcjs_release attach
