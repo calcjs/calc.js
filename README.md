@@ -30,7 +30,6 @@ We first started out calc.js as a seperate module for one of our client's projec
 make clean && make
 ./_rel/calcjs_release/bin/calcjs_release start
 ./_rel/calcjs_release/bin/calcjs_release attach
-
 #[In the attached erlang console]
 application:stop(mnesia).
 calcjs_app:install([node() | nodes()]).
